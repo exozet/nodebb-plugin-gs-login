@@ -1,11 +1,11 @@
 {
-  "name": "nodebb-plugin-sso-session",
+  "name": "nodebb-plugin-gslogin",
   "version": "1.0.0",
-  "description": "NodeBB SSO Session Plugin",
+  "description": "NodeBB GameSparks Login",
   "main": "library.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/contentblvd/nodebb-plugin-sso-session"
+    "url": "https://github.com/kwnetzwelt/nodebb-plugin-gslogin"
   },
   "keywords": [
     "nodebb",
@@ -14,11 +14,11 @@
     "sso"
   ],
   "author": {
-    "name": "markcarey"
+    "name": "Kai Wegner"
   },
   "license": "MIT",
   "nbbpm": {
-    "compatibility": "^0.7.0"
+    "compatibility": "^0.9.2"
   },
   "readme": "",
   "readmeFilename": "README.md"

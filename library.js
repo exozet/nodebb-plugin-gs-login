@@ -12,8 +12,7 @@
     nconf = module.parent.require('nconf'),
     winston = module.parent.require('winston'),
     async = module.parent.require('async'),
-    cookie = require('cookie-signature'),
-    request = require('request'),
+    request = module.parent.require('request'),
     constants = Object.freeze({
       name: 'contentblvd'
     }),
@@ -26,12 +25,22 @@
 
   plugin.continueLogin = function(req, username, password, next) {
     
-      var val_decoded = new Buffer(username,'base64').toString('ascii');
-      winston.info('decoded is ' + val_decoded);
-      var externalID = cookie.unsign(val_decoded, process.env.FORUM_SSO_SECRET);
-      winston.info('unsigned is ' + externalID);
+      //var val_decoded = new Buffer(username,'base64').toString('ascii');
+      //winston.info('decoded is ' + val_decoded);
+      //var externalID = cookie.unsign(val_decoded, process.env.FORUM_SSO_SECRET);
+      //winston.info('unsigned is ' + externalID);
     
-      request('https://app.contentblvd.com/v1/users/' + externalID, function (err, response, body) {
+      var gsURL = "https://preview.gamesparks.net/callback/{APIKEY}/{APISECRET}";
+      gsURL +="?forumlogin=1&username=" + username + "&password=" + password;
+      winston.info(gsURL);
+      
+      next(null,null);
+      
+      return;
+
+
+
+      request(gsURL, function (err, response, body) {
   			if (err) {
   				return next(null, null);
   			}
@@ -40,22 +49,14 @@
   				// console.log(data);
   				var fullName = data.first_name + ' ' + data.last_name;
   				fullName = fullName.trim();
-  				if (!fullName) {
-  				  if (data.media_properties.length > 0)
-  				    fullName = data.media_properties[0].name;
-  				}
-  				if (!fullName) {
-  				  if (data.brands.length > 0)
-  				    fullName = data.brands[0].name;
-  				}
   				var profile = {};
-          profile.id = data.id;
-          profile.displayName = fullName;
-          profile.email = data.email;
-          profile.picture = data.avatar;
-          if (data.default_role == 'admin') {
-            profile.isAdmin = 1;
-          }
+				profile.id = data.id;
+				profile.displayName = fullName;
+				profile.email = data.email;
+				profile.picture = data.avatar;
+				if (data.default_role == 'admin') {
+					profile.isAdmin = 1;
+				}
           plugin.moreLogin({
             CBid: profile.id,
             handle: profile.displayName,

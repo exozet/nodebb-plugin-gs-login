@@ -1,11 +1,11 @@
 {
-      "id": "nodebb-plugin-sso-session"
-    , "name": "NodeBB ContentBLVD SSO Plugin"
-    , "description": "A single sign on (SSO) plugin for nodeBB that logs the user in based a CB login session."
-    , "url": "https://github.com/contentblvd/nodebb-plugin-sso-session"
+      "id": "nodebb-plugin-gslogin"
+    , "name": "NodeBB GameSparks Login"
+    , "description": "-"
+    , "url": "https://github.com/kwnetzwelt/nodebb-plugin-gslogin"
     , "library": "./library.js"
     , "scripts": [
-    		"sso.js"
+    
     	]
     , "hooks": [
         {
