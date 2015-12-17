@@ -1,26 +1,26 @@
 (function(module) {
   "use strict";
 
-  var	passport = module.parent.require('passport'),
-  	passportLocal = module.parent.require('passport-local').Strategy,
-  	User = module.parent.require('./user'),
-    Groups = module.parent.require('./groups'),
-    meta = module.parent.require('./meta'),
-    db = module.parent.require('../src/database'),
-    fs = module.parent.require('fs'),
-    path = module.parent.require('path'),
-    nconf = module.parent.require('nconf'),
-    winston = module.parent.require('winston'),
-    async = module.parent.require('async'),
-    request = module.parent.require('request'),
-    constants = Object.freeze({
-      name: 'contentblvd'
-    }),
-  	plugin = {};
+  var passport = module.parent.require('passport'),
+      passportLocal = module.parent.require('passport-local').Strategy,
+      User = module.parent.require('./user'),
+      Groups = module.parent.require('./groups'),
+      meta = module.parent.require('./meta'),
+      db = module.parent.require('../src/database'),
+      fs = module.parent.require('fs'),
+      path = module.parent.require('path'),
+      nconf = module.parent.require('nconf'),
+      winston = module.parent.require('winston'),
+      async = module.parent.require('async'),
+      request = module.parent.require('request'),
+      constants = Object.freeze({
+        name: 'contentblvd'
+      }),
+      plugin = {};
 
   plugin.login = function() {
-  	winston.info('[login] Registering new local login strategy');
-  	passport.use(new passportLocal({passReqToCallback: true}, plugin.continueLogin));
+      winston.info('[login] Registering new local login strategy');
+      passport.use(new passportLocal({passReqToCallback: true}, plugin.continueLogin));
   };
 
   plugin.continueLogin = function(req, username, password, next) {
@@ -41,22 +41,22 @@
 
 
       request(gsURL, function (err, response, body) {
-  			if (err) {
-  				return next(null, null);
-  			}
-  			if (response.statusCode === 200) {
-  				var data = JSON.parse(body);
-  				// console.log(data);
-  				var fullName = data.first_name + ' ' + data.last_name;
-  				fullName = fullName.trim();
-  				var profile = {};
-				profile.id = data.id;
-				profile.displayName = fullName;
-				profile.email = data.email;
-				profile.picture = data.avatar;
-				if (data.default_role == 'admin') {
-					profile.isAdmin = 1;
-				}
+            if (err) {
+                return next(null, null);
+            }
+            if (response.statusCode === 200) {
+                var data = JSON.parse(body);
+                // console.log(data);
+                var fullName = data.first_name + ' ' + data.last_name;
+                fullName = fullName.trim();
+                var profile = {};
+                profile.id = data.id;
+                profile.displayName = fullName;
+                profile.email = data.email;
+                profile.picture = data.avatar;
+                if (data.default_role == 'admin') {
+                    profile.isAdmin = 1;
+                }
           plugin.moreLogin({
             CBid: profile.id,
             handle: profile.displayName,
@@ -68,12 +68,12 @@
               return next(err);
             }
             var duration = 1000*60*60*24*parseInt(meta.config.loginDays || 14, 10);
-      			req.session.cookie.maxAge = duration;
-      			req.session.cookie.expires = new Date(Date.now() + duration);
+                req.session.cookie.maxAge = duration;
+                req.session.cookie.expires = new Date(Date.now() + duration);
             next(null, user);
           });
-  			}
-  		});
+            }
+        });
   };
 
   plugin.getUidByCBid = function(CBid, callback) {
@@ -112,8 +112,8 @@
                 } else {
                   picture = 'https://d2m2amo0drgja.cloudfront.net/w400/' + picture;
                 }
-  							User.setUserField(uid, 'uploadedpicture', picture);
-  							User.setUserField(uid, 'picture', picture);
+                User.setUserField(uid, 'uploadedpicture', picture);
+                User.setUserField(uid, 'picture', picture);
               }
 
               if (payload.isAdmin) {
