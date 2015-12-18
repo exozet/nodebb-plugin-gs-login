@@ -2,7 +2,7 @@
   "name": "nodebb-plugin-gs-login",
   "version": "1.0.0",
   "description": "NodeBB GameSparks Login",
-  "main": "library.js",
+  "main": "index.js",
   "license": "MIT",
   "author": {
     "name": "Marcel Ludwig",
