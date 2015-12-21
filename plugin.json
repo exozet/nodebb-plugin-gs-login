@@ -1,14 +1,14 @@
 {
-      "id": "nodebb-plugin-gs-login"
-    , "name": "NodeBB GameSparks Login"
-    , "description": "-"
-    , "url": "https://github.com/exozet/nodebb-plugin-gs-login"
-    , "library": "./library.js"
-    , "scripts": []
-    , "hooks": [
-        {
-            "hook": "action:auth.overrideLogin"
-            , "method": "login"
-        }
+  "id": "nodebb-plugin-gs-login",
+  "name": "NodeBB GameSparks Login",
+  "description": "-",
+  "url": "https://github.com/exozet/nodebb-plugin-gs-login",
+  "library": "./index.js",
+  "templates": "./public/templates",
+  "hooks":
+    [
+      { "hook": "action:auth.overrideLogin", "method": "login" },
+      { "hook": "static:app.load", "method": "onLoad" },
+      { "hook": "filter:admin.header.build", "method": "admin.menu" }
     ]
 }
