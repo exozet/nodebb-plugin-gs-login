@@ -4,12 +4,11 @@
   "description": "-",
   "url": "https://github.com/exozet/nodebb-plugin-gs-login",
   "library": "./index.js",
-  "scripts": [],
+  "templates": "./public/templates",
   "hooks":
     [
-      {
-        "hook": "action:auth.overrideLogin",
-        "method": "login"
-      }
+      { "hook": "action:auth.overrideLogin", "method": "login" },
+      { "hook": "static:app.load", "method": "onLoad" },
+      { "hook": "filter:admin.header.build", "method": "admin.menu" }
     ]
 }

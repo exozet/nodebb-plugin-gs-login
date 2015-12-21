@@ -39,8 +39,7 @@ var OverrideLogin = (function () {
 
     var continueLogin = function (req, username, password, next) {
 
-        var onAuthenticationSuccessful = function (responseBody) {
-            var data = JSON.parse(responseBody);
+        var onAuthenticationSuccessful = function (data) {
             var profile = createProfile(data.player);
             moreLogin({
                 CBid: profile.id,
@@ -59,27 +58,30 @@ var OverrideLogin = (function () {
             });
         };
 
-        var onResponseErrors = function(errors) {
-          for(var i = 0; i < errors.length; i++)
-          {
-              winston.error('[gs-login] ' + errors[i].message);
-          }
+        var onResponseError = function(code, message) {
+            winston.error('[gs-login] Response-StatusCode: ' + code);
+            winston.error('[gs-login] Response-Error: ' + message);
         };
 
         var onResponse = function (error, response, body) {
-            winston.verbose('[gs-login] ' + body);
-            if(response.statusCode !== 200) {
-                var content = JSON.parse(body);
-                if (content.errors || error) {
-                    if (error) {
-                        content.errors.push({message: error});
-                    }
-                    onResponseErrors(content.errors);
+            if(response.statusCode !== 200 || error) {
+                if(error) {
+                    onResponseError(null, error);
+                } else {
+                    onResponseError(response.statusCode, body);
+                }
+                next(null, null);
+            }
+            else if(response.statusCode === 200)
+            {
+                var data = JSON.parse(body);
+                if(data.authentication === 'success') {
+                    onAuthenticationSuccessful(data);
+                } else
+                {
+                    winston.error('[gs-login] Authentication failed. ' + data.errors.message);
                     next(null, null);
                 }
-            } else if(response.statusCode === 200)
-            {
-                onAuthenticationSuccessful(body);
             }
         };
 
@@ -103,7 +105,7 @@ var OverrideLogin = (function () {
 
     var moreLogin = function (payload, callback) {
         if (payload) {
-            winston.info('[gs-login] Payload: ' + payload);
+            winston.verbose('[gs-login] Payload: ' + payload);
             getUidByCBid(payload.CBid, function (err, uid) {
                 if (err) {
                     return callback(err);
