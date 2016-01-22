@@ -16,9 +16,9 @@
                         </div>
                         <div class="col-lg-12">
                             <div class="form-group">
-                                <label for="apiSecret">
-                                    <input type="text" name="apiSecret" id="apiSecret" data-key="strings.apiSecret" />
-                                    Gamesparks API Secret
+                                <label for="apiKey">
+                                    <input type="text" name="apiKey" id="apiKey" data-key="strings.apiKey" />
+                                    Gamesparks API Key
                                 </label>
                             </div>
                             <div class="form-group">
