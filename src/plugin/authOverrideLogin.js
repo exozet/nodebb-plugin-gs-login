@@ -79,7 +79,9 @@ var OverrideLogin = (function () {
                     onAuthenticationSuccessful(data);
                 } else
                 {
-                    winston.error('[gs-login] Authentication failed. ' + data.errors.message);
+                    if(data.errors) {
+                        winston.error('[gs-login] Authentication failed. ' + data.errors.message);
+                    }
                     next(null, null);
                 }
             }
@@ -145,6 +147,19 @@ var OverrideLogin = (function () {
                                 uid: uid
                             });
                         }
+
+                        // force username set by Gamesparks
+                        User.getUsernameByEmail(payload.email, function (err, username) {
+                            if(err) {
+                                winston.error('[gs-login] getUsernameByEmail: ' + err);
+                            } else if (username !== payload.handle && uid) {
+                                User.updateProfile(uid, { username : payload.handle }, function (err) {
+                                    if(err) {
+                                        winston.error('[gs-login] updateProfile: ' + err);
+                                    }
+                                });
+                            }
+                        });
                     };
 
                     User.getUidByEmail(payload.email, function (err, uid) {
@@ -168,14 +183,6 @@ var OverrideLogin = (function () {
                         }
                     });
                 }
-
-                // force username set by Gamesparks
-                User.updateProfile(uid, { username : payload.handle }, function (err) {
-                    if(err)
-                    {
-                        winston.error('[gs-login] ' + err);
-                    }
-                });
             });
         } else {
             winston.error('[gs-login] missing payload');
