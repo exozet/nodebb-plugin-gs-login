@@ -10,7 +10,7 @@ var gamesparksCallbackService = (function () {
     var defaultSettings = {
         strings: {
             stage: 'preview', // stage | preview | live
-            apiSecret: 'yourSecret',
+            apiKey: 'yourKey',
             serverSecret: 'yourServerSecret'
         }
     };
@@ -23,7 +23,7 @@ var gamesparksCallbackService = (function () {
         payload.userAgent = 'NodeBB';    // since Gamesparks doesn't expose the Headers...
         var settings = mySettings.get().strings;
         var requestOptions = {
-            url: 'https://' + settings.stage + '.gamesparks.net/callback/' + settings.apiSecret + '/' + settings.serverSecret,
+            url: 'https://' + settings.stage + '.gamesparks.net/callback/' + settings.apiKey + '/' + settings.serverSecret,
             headers: {
                 'User-Agent' : 'NodeBB' // used on Gamesparks side to identify the post request.
             },

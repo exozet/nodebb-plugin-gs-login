@@ -13,7 +13,7 @@ var gamesparksAdmin = (function () {
         defaultSettings = {
         strings: {
             stage: 'preview', // stage | preview | live
-            apiSecret: 'yourSecret',
+            apiKey: 'yourKey',
             serverSecret: 'yourServerSecret'
         }
     };
